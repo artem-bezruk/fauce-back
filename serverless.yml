@@ -1,7 +1,83 @@
-service: serverless-api
+service: nbt-serverless-api
 provider:
   name: aws
-  runtime: nodejs10.x
-functions:
+  runtime: nodejs8.10
+  profile: default
+  region: eu-central-1
+  stage: ${opt:stage, 'dev'}
+  environment:
+    CREATED_REWARDS_TABLE_NAME: ${self:service}-${self:provider.stage}-rewards
+    LINK_XDAI_CONTRACT_ADDRESS: '0x9971B0E163795c49cAF5DefF06C271fCd8f3Ebe9'    
+    ZERO_ADDRESS: '0x0000000000000000000000000000000000000000'
+    RELAY_GAS_PRICE: '1331000000'
+    GAS_LIMIT: '300000'
+    BURNER_WALLET_HOST: 'https://xdai.io'
+    WEB3_HTTPS_PROVIDER: 'https://poa.api.nodesmith.io/v1/dai/jsonrpc?apiKey=2913666d2da64f9aaba130863c442797'
+    SOURCE_XDAI_ADDRESS: '0xC4E99718cDD258405387c62120D0491705F28622'
+    SOURCE_PRIVATE_KEY: '4226EA89B78AC8D00006AB3A1CF9E4561A5E769FF53EB251CA9794675538D4C6'
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - Fn::Join:
+          - ':'
+          -
+            - 'arn:aws:dynamodb:${self:provider.region}'
+            - Ref: 'AWS::AccountId'
+            - 'table/${self:service}-${self:provider.stage}-*'
+functions:  
   hello:
-    handler: handler.hello
+    handler: src/hello.handler
+    events:
+        - http:
+            path: hello
+            method: get
+            cors: true
+  createReward:
+    handler: src/createReward.handler
+    events:
+        - http:
+            path: reward
+            method: post
+            cors: true
+resources:
+  Resources:
+    CreatedRewardsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:service}-${self:provider.stage}-rewards
+        AttributeDefinitions:
+          - AttributeName: hashCode
+            AttributeType: S
+        KeySchema:
+          - AttributeName: hashCode
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    GatewayResponse:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: EXPIRED_TOKEN
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        StatusCode: '401'
+    AuthFailureGatewayResponse:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: UNAUTHORIZED
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        StatusCode: '401'
