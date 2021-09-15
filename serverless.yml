@@ -13,8 +13,8 @@ provider:
     GAS_LIMIT: '300000'
     BURNER_WALLET_HOST: 'https://xdai.io'
     WEB3_HTTPS_PROVIDER: 'https://poa.api.nodesmith.io/v1/dai/jsonrpc?apiKey=2913666d2da64f9aaba130863c442797'
-    SOURCE_XDAI_ADDRESS: '0xC4E99718cDD258405387c62120D0491705F28622'
-    SOURCE_PRIVATE_KEY: '<REDACTED>'
+    SOURCE_XDAI_ADDRESS: ${env:SECRET_XDAI_PUBLIC_ADDRESS}
+    SOURCE_PRIVATE_KEY: ${env:SECRET_XDAI_PRIVATE_KEY}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -46,6 +46,13 @@ functions:
             path: reward
             method: post
             cors: true
+  getReward:
+    handler: src/getReward.handler
+    events:
+        - http:
+            path: reward
+            method: get
+            cors: true                       
 resources:
   Resources:
     CreatedRewardsTable:

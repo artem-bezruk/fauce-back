@@ -1,0 +1,6 @@
+{
+    "resource": "/",
+    "path": "/reward",
+    "httpMethod": "GET",
+    "body": null
+}
