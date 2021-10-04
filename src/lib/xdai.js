@@ -61,14 +61,17 @@ createLink = async (web3, ether) => {
     return { claimUrl, receipt, randomHash };
 }
 module.exports.createXDAILink = async function(rewardObj) {
-    web3 = getWeb3();
-    console.log(JSON.stringify(rewardObj));
     const rewardInXDAI = rewardObj.rewardInXDAI;
-    const { claimUrl, receipt, randomHash } = await createLink(web3, rewardInXDAI);
-    console.log(`Generated claimUrl = ${claimUrl}, receipt = ${JSON.stringify(receipt)}`);
-    rewardObj["claimUrl"] = claimUrl;
-    rewardObj["transactionId"] = receipt;
-    rewardObj["hashCode"] = randomHash;
+    if(parseFloat(rewardInXDAI)>0){
+        web3 = getWeb3();
+        const { claimUrl, receipt, randomHash } = await createLink(web3, rewardInXDAI);
+        console.log(`Generated claimUrl = ${claimUrl}, receipt = ${JSON.stringify(receipt)}`);
+        rewardObj["claimUrl"] = claimUrl;
+        rewardObj["transactionId"] = receipt;
+        rewardObj["hashCode"] = randomHash;            
+    }
+    else
+        console.log("No reward given");
     rewardObj["createdTimestamp"] = utils.getEpochFromDateString(new Date());
     await reward.create(rewardObj);
     return rewardObj;
