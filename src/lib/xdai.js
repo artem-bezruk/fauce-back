@@ -70,8 +70,10 @@ module.exports.createXDAILink = async function(rewardObj) {
         rewardObj["transactionId"] = receipt;
         rewardObj["hashCode"] = randomHash;            
     }
-    else
+    else{
+        rewardObj["hashCode"] = getWeb3().utils.sha3(Math.random().toString()); 
         console.log("No reward given");
+    }
     rewardObj["createdTimestamp"] = utils.getEpochFromDateString(new Date());
     await reward.create(rewardObj);
     return rewardObj;
