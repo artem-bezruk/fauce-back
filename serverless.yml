@@ -40,6 +40,7 @@ functions:
             method: get
             cors: true
   createReward:
+    timeout: 12
     handler: src/createReward.handler
     events:
         - http:
@@ -47,6 +48,7 @@ functions:
             method: post
             cors: true
   getReward:
+    timeout: 12
     handler: src/getReward.handler
     events:
         - http:

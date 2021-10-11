@@ -4,7 +4,7 @@ const defaultHeaders = {
 }
 module.exports.getTimestamp = () => {
     const date = new Date();    
-    return date.getTime(); 
+    return date.getTime();
 }
 createHttpResponse = (status, body) => {
     return {
