@@ -6,12 +6,12 @@ module.exports.handler = async (event, context, callback) => {
   await reward.getAll()
     .then((result) => {
       let parsedResult = ((result && result.Items || []));  
+      let sortedResults = parsedResult.sort((a,b) => {return a.createdTimestamp - b.createdTimestamp});   
       if(limitParameterProvided){
-        parsedResult = parsedResult.filter((item,index) => {return index<event.queryStringParameters.limit});
-        console.log('Results limited to first ' + event.queryStringParameters.limit + ' items...');
-        console.log('parsedResult = ' + JSON.stringify(parsedResult));
+        sortedResults = sortedResults.filter((item,index) => {return index>=(sortedResults.length - event.queryStringParameters.limit)});
+        console.log('Results limited to last ' + event.queryStringParameters.limit + ' items...');
       }      
-      const body = {rewards: parsedResult };
+      const body = {rewards: sortedResults };
       console.log('Response body = ' + JSON.stringify(body));
       callback(null, utils.createHttpResponse(200, body));
     })
