@@ -15,6 +15,8 @@ provider:
     WEB3_HTTPS_PROVIDER: 'https://poa.api.nodesmith.io/v1/dai/jsonrpc?apiKey=2913666d2da64f9aaba130863c442797'
     SOURCE_XDAI_ADDRESS: ${env:SOURCE_XDAI_PUBLIC_ADDRESS}
     SOURCE_PRIVATE_KEY: ${env:SOURCE_XDAI_PRIVATE_KEY}
+    HTTP_BASIC_AUTH_USER_NAME: ${env:HTTP_BASIC_AUTH_USER}
+    HTTP_BASIC_AUTH_PASSWORD: ${env:HTTP_BASIC_AUTH_PASSWORD}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -32,12 +34,15 @@ provider:
             - Ref: 'AWS::AccountId'
             - 'table/${self:service}-${self:provider.stage}-*'
 functions:  
+  authorizerFunc:
+    handler: src/lib/authorization.handler
   hello:
     handler: src/hello.handler
     events:
         - http:
             path: hello
             method: get
+            authorizer: authorizerFunc
             cors: true
   createReward:
     timeout: 12
