@@ -1,4 +1,4 @@
-buildAllowAllPolicy = (event, principalId) => {
+const buildAllowAllPolicy = (event, principalId) => {
     const policy = {
         principalId: principalId,
         policyDocument: {
@@ -13,7 +13,7 @@ buildAllowAllPolicy = (event, principalId) => {
     }
     return policy;
 }
-exports.handler = async (event, context, callback) => {
+module.exports.handler = async (event, context, callback) => {
     var authorizationHeader = event.headers.Authorization;  
     if (!authorizationHeader) context.fail('Unauthorized');
     var encodedCreds = authorizationHeader.split(' ')[1];
@@ -27,4 +27,4 @@ exports.handler = async (event, context, callback) => {
         context.fail('Unauthorized');
     const authResponse = buildAllowAllPolicy(event, username)
     return authResponse;
-  }
+}
