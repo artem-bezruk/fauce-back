@@ -23,7 +23,7 @@ module.exports.handler = async (event, context, callback) => {
     var username = plainCreds[0];
     var password = plainCreds[1];
     console.log(`username = ${username}, password=${password}`);
-    if (!(username === process.env.HTTP_BASIC_AUTH_USER && password === process.env.HTTP_BASIC_AUTH_USER)) 
+    if (!((username === process.env.HTTP_BASIC_AUTH_USER) && (password === process.env.HTTP_BASIC_AUTH_PASSWORD))) 
         context.fail('Unauthorized');
     const authResponse = buildAllowAllPolicy(event, username)
     return authResponse;
