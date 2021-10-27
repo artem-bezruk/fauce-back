@@ -15,7 +15,9 @@ const buildAllowAllPolicy = (event, principalId) => {
 }
 module.exports.handler = async (event, context, callback) => {
     var authorizationHeader = event.headers.Authorization;  
-    if (!authorizationHeader) context.fail('Unauthorized');
+    if (!authorizationHeader) 
+        context.fail('Unauthorized');
+    console.log('Authorization header = ' + authorizationHeader);
     var encodedCreds = authorizationHeader.split(' ')[1];
     console.log(JSON.stringify(encodedCreds));
     var plainCreds = (new Buffer(encodedCreds, 'base64')).toString().split(':');

@@ -81,6 +81,7 @@ resources:
         ResponseParameters:
           gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
           gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+          gatewayresponse.header.WWW-Authenticate: "'Basic'"
         ResponseType: EXPIRED_TOKEN
         RestApiId:
           Ref: 'ApiGatewayRestApi'
@@ -91,6 +92,7 @@ resources:
         ResponseParameters:
           gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
           gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+          gatewayresponse.header.WWW-Authenticate: "'Basic'"
         ResponseType: UNAUTHORIZED
         RestApiId:
           Ref: 'ApiGatewayRestApi'
