@@ -13,7 +13,7 @@ const buildAllowAllPolicy = (event, principalId) => {
     }
     return policy;
 }
-module.exports.handler = async (event, context, callback) => {
+module.exports.handler = async function (event, context, callback) {
     var authorizationHeader = event.headers.Authorization;  
     if (!authorizationHeader) 
         context.fail('Unauthorized');

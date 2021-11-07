@@ -46,7 +46,7 @@ functions:
               name: authorizerFunc
               resultTtlInSeconds: 0
               identitySource: method.request.header.Authorization
-              type: token
+              type: request
             cors: true
   createReward:
     timeout: 12
