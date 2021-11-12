@@ -42,11 +42,7 @@ functions:
         - http:
             path: hello
             method: get
-            authorizer:
-              name: authorizerFunc
-              resultTtlInSeconds: 0
-              identitySource: method.request.header.Authorization
-              type: token
+            authorizer: authorizerFunc
             cors: true
   createReward:
     timeout: 12
@@ -89,4 +85,4 @@ resources:
         ResponseType: UNAUTHORIZED
         RestApiId:
           Ref: 'ApiGatewayRestApi'
-        StatusCode: '401'
+        StatusCode: '401'        
