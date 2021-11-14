@@ -5,7 +5,7 @@ module.exports.handler = async (event, context, callback) => {
     .then((result) => {
       const parsedResult = ((result && result.Items || []));  
       const sortedResults = parsedResult.sort((a,b) => {return a.createdTimestamp - b.createdTimestamp});
-      const body = {rewards: sortedResults[sortedResults.length-1]};
+      const body = {rewards: [sortedResults[sortedResults.length-1]]};
       console.log('Response body = ' + JSON.stringify(body));
       callback(null, utils.createHttpResponse(200, body));
     })
