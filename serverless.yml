@@ -45,7 +45,7 @@ functions:
             authorizer: authorizerFunc
             cors: true
   createReward:
-    timeout: 12
+    timeout: 15
     handler: src/createReward.handler
     events:
         - http:
@@ -53,7 +53,7 @@ functions:
             method: post
             cors: true
   getReward:
-    timeout: 12
+    timeout: 15
     handler: src/getReward.handler
     events:
         - http:
