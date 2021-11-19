@@ -79,8 +79,6 @@ resources:
       Type: 'AWS::ApiGateway::GatewayResponse'
       Properties:
         ResponseParameters:
-          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
-          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"          
           gatewayresponse.header.WWW-Authenticate: "'Basic'"
         ResponseType: UNAUTHORIZED
         RestApiId:
