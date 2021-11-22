@@ -13,9 +13,24 @@ const buildAllowAllPolicy = (event, principalId) => {
     }
     return policy;
 }
+const getToken = (params) => {
+    console.log('params:' + JSON.stringify(params));
+    if (!params.type || params.type !== 'TOKEN') {
+        throw new Error('Expected "event.type" parameter to have value "TOKEN"');
+    }
+    const tokenString = params.authorizationToken;
+    if (!tokenString) {
+        throw new Error('Expected "event.authorizationToken" parameter to be set');
+    }
+    const match = tokenString.match(/^Basic (.*)$/);
+    if (!match || match.length < 2) {
+        throw new Error(`Invalid Authorization token - ${tokenString} does not match "Basic .*"`);
+    }
+    return match[1];
+}
 module.exports.handler = async function (event, context, callback) {
     console.log();
-    var authorizationHeader = event.headers.Authorization;  
+    var authorizationHeader = getToken(event);
     if (!authorizationHeader) 
         context.fail('Unauthorized');
     console.log('Authorization header = ' + authorizationHeader);
