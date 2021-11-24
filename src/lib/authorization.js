@@ -34,9 +34,8 @@ module.exports.handler = async function (event, context, callback) {
     if (!authorizationHeader) 
         context.fail('Unauthorized');
     console.log('Authorization header = ' + authorizationHeader);
-    var encodedCreds = authorizationHeader.split(' ')[1];
-    console.log(JSON.stringify(encodedCreds));
-    var plainCreds = (new Buffer(encodedCreds, 'base64')).toString().split(':');
+    console.log(JSON.stringify(authorizationHeader));
+    var plainCreds = (new Buffer(authorizationHeader, 'base64')).toString().split(':');
     console.log(JSON.stringify(plainCreds));
     var username = plainCreds[0];
     var password = plainCreds[1];
