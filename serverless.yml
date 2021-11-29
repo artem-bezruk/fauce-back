@@ -51,6 +51,7 @@ functions:
         - http:
             path: reward
             method: post
+            authorizer: authorizerFunc
             cors: true
   getReward:
     timeout: 15
