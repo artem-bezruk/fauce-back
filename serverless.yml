@@ -60,7 +60,15 @@ functions:
         - http:
             path: reward
             method: get
-            cors: true                       
+            cors: true  
+  getStatistics:
+    timeout: 15
+    handler: src/getStatistics.handler
+    events:
+        - http:
+            path: stats
+            method: get
+            cors: true                                   
 resources:
   Resources:
     CreatedRewardsTable:
