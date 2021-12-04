@@ -4,7 +4,7 @@ const getTotalGames = (gameArray) => {
     return gameArray.length;
 }
 const getWinningGames = (gameArray) => {
-    return gameArray.filter((game,index) => {return game.gameData.rewardinXDAI !== 0});
+    return gameArray.filter((game) => {return game.rewardInXDAI > 0}).length;
 }
 const getLosingGames = (gameArray) => {
     return getTotalGames(gameArray) - getWinningGames(gameArray);
@@ -25,17 +25,17 @@ const isGame3 = (attempt) => {
     return !isGame1(attempt) && !isGame2(attempt) && (((attempt.time > 223) && (attempt.time < 227)) || ((attempt.distance >= 1000) && (attempt.distance < 1002)));
 }
 const isUnknownGame = (attempt) => {
-    return !isGame1(attempt) && !isGame2(attempt) && !isGame3(attempt);
+    return !(isGame1(attempt) || isGame2(attempt) || isGame3(attempt));
 }
 module.exports.handler = async (event, context, callback) => {
   await reward.getAll()
     .then((result) => {
       const parsedResult = ((result && result.Items || []));  
       const sortedResults = parsedResult.sort((a,b) => {return a.createdTimestamp - b.createdTimestamp});
-      const game1 = sortedResults.filter((result,index) => {return isGame1(result.gameData)});
-      const game2 = sortedResults.filter((result,index) => {return isGame2(result.gameData)});
-      const game3 = sortedResults.filter((result,index) => {return isGame3(result.gameData)});
-      const unknownGame = sortedResults.filter((result, index) => {return !result.gameData || isUnknownGame(result.gameData)});
+      const game1 = sortedResults.filter((result) => {return (result.gameData && isGame1(result.gameData))});
+      const game2 = sortedResults.filter((result) => {return (result.gameData && isGame2(result.gameData))});
+      const game3 = sortedResults.filter((result) => {return (result.gameData && isGame3(result.gameData))});
+      const unknown = sortedResults.filter((result) => {return (result.gameData ? isUnknownGame(result.gameData) : false)});
       const statistics = { statistics :
         [
             {
@@ -69,7 +69,7 @@ module.exports.handler = async (event, context, callback) => {
         ]
       };
       console.log('Response body = ' + JSON.stringify(statistics));
-      callback(null, utils.createHttpResponse(200, body));
+      callback(null, utils.createHttpResponse(200, statistics));
     })
     .catch((error) => {
       console.log('Error promise resolved');
