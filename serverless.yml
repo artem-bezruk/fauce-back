@@ -68,7 +68,16 @@ functions:
         - http:
             path: stats
             method: get
-            cors: true                                   
+            cors: true  
+  getLinks:
+    timeout: 15
+    handler: src/getLinksOnly.handler
+    events:
+        - http:
+            path: links
+            method: get
+            authorizer: authorizerFunc
+            cors: true                                               
 resources:
   Resources:
     CreatedRewardsTable:
