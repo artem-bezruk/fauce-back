@@ -1,22 +1,15 @@
-service: nbt-serverless-api
+service: celo-faucet-api
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs10.x
   profile: default
   region: eu-central-1
   stage: ${opt:stage, 'dev'}
   environment:
-    CREATED_REWARDS_TABLE_NAME: ${self:service}-${self:provider.stage}-rewards
-    LINK_XDAI_CONTRACT_ADDRESS: '0x9971B0E163795c49cAF5DefF06C271fCd8f3Ebe9'    
-    ZERO_ADDRESS: '0x0000000000000000000000000000000000000000'
-    RELAY_GAS_PRICE: '1331000000'
-    GAS_LIMIT: '300000'
-    BURNER_WALLET_HOST: 'https://xdai.io'
-    WEB3_HTTPS_PROVIDER: 'https://poa.api.nodesmith.io/v1/dai/jsonrpc?apiKey=2913666d2da64f9aaba130863c442797'
-    SOURCE_XDAI_ADDRESS: ${env:SOURCE_XDAI_PUBLIC_ADDRESS}
-    SOURCE_PRIVATE_KEY: ${env:SOURCE_XDAI_PRIVATE_KEY}
-    HTTP_BASIC_AUTH_USER: ${env:HTTP_BASIC_AUTH_USER}
-    HTTP_BASIC_AUTH_PASSWORD: ${env:HTTP_BASIC_AUTH_PASSWORD}
+    FAUCET_QUEUE_TABLE_NAME: ${self:service}-${self:provider.stage}-faucet-queue
+    NODE_PROVIDER: 'https://baklava-forno.celo-testnet.org'
+    SECRET_NAME: 'CELO_BAKLAVA_FAUCET_PRIVATE_KEY'
+    REGION: ${self:provider.region}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -44,51 +37,41 @@ functions:
             method: get
             authorizer: authorizerFunc
             cors: true
-  createReward:
+  faucetRequest:
     timeout: 15
-    handler: src/createReward.handler
+    handler: src/createFaucetRequest.handler
     events:
         - http:
-            path: reward
+            path: request
             method: post
-            authorizer: authorizerFunc
             cors: true
-  getReward:
+  faucetClaim:
     timeout: 15
-    handler: src/getReward.handler
+    handler: src/claimFaucetRequest.handler
     events:
         - http:
-            path: reward
-            method: get
-            cors: true  
-  getStatistics:
+            path: claim
+            method: post
+            cors: true           
+  getFaucetRequest:
     timeout: 15
-    handler: src/getStatistics.handler
+    handler: src/getFaucetRequests.handler
     events:
         - http:
-            path: stats
+            path: request
             method: get
-            cors: true  
-  getLinks:
-    timeout: 15
-    handler: src/getLinksOnly.handler
-    events:
-        - http:
-            path: links
-            method: get
-            authorizer: authorizerFunc
-            cors: true                                               
+            cors: true                                       
 resources:
   Resources:
-    CreatedRewardsTable:
+    FaucetTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:service}-${self:provider.stage}-rewards
+        TableName: ${self:service}-${self:provider.stage}-faucet-queue
         AttributeDefinitions:
-          - AttributeName: hashCode
+          - AttributeName: address
             AttributeType: S
         KeySchema:
-          - AttributeName: hashCode
+          - AttributeName: requestId
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
