@@ -1,0 +1,6 @@
+{
+    "resource": "/",
+    "path": "/request",
+    "httpMethod": "POST",
+    "body": "{\"address\": \"0x0000000000000000000000000000000000000000\"}"
+}

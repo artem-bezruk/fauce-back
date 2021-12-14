@@ -1,6 +1,6 @@
 {
     "resource": "/",
-    "path": "/reward",
+    "path": "/request",
     "httpMethod": "GET",
     "body": null
 }

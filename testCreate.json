@@ -1,6 +1,6 @@
 {
     "resource": "/",
-    "path": "/reward",
+    "path": "/request",
     "httpMethod": "POST",
-    "body": "{\"rewardInXDAI\": \".01\"}"
+    "body": "{\"address\": \"0x0000000000000000000000000000000000000001\"}"
 }
