@@ -5,7 +5,7 @@ const utils = require('./utils');
 const NODE_URL = process.env.NODE_PROVIDER;
 const REGION = process.env.AWS_REGION;
 const SECRET_NAME = process.env.PRIVATE_KEY_SECRET_NAME;
-module.exportscreateFaucetRequest = (faucetRequest) => {
+module.exports.createFaucetRequest = (faucetRequest) => {
     faucetRequest["createdTimestamp"] = utils.getTimestamp();
     faucetRequest["status"] = "REQUESTED";
     return faucetStorage.create(faucetRequest);
@@ -15,7 +15,7 @@ getAccount = () => {
     const privateKey = utils.getSecret(SECRET_NAME, REGION);
     return web3.eth.accounts.privateKeyToAccount(privateKey);
 }
-module.exports.claimFaucetRequest = (faucetRequest) => {
+module.exports.claimFaucetRequest = async (faucetRequest) => {
     console.log('************ Faucet claim start ****************');
     console.log(JSON.stringify(faucetRequest));
     try{
