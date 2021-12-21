@@ -2,10 +2,12 @@ const Web3 = require('web3');
 const contractkit = require('@celo/contractkit');
 const faucetStorage = require('./faucetStorage');
 const utils = require('./utils');
+const uuid = require("uuid/v4");
 const NODE_URL = process.env.NODE_PROVIDER;
 const REGION = process.env.AWS_REGION;
 const SECRET_NAME = process.env.PRIVATE_KEY_SECRET_NAME;
 module.exports.createFaucetRequest = (faucetRequest) => {
+    faucetRequest["requestId"] = uuid();
     faucetRequest["createdTimestamp"] = utils.getTimestamp();
     faucetRequest["status"] = "REQUESTED";
     return faucetStorage.create(faucetRequest);

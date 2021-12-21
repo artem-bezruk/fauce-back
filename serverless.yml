@@ -68,7 +68,7 @@ resources:
       Properties:
         TableName: ${self:service}-${self:provider.stage}-faucet-queue
         AttributeDefinitions:
-          - AttributeName: address
+          - AttributeName: requestId
             AttributeType: S
         KeySchema:
           - AttributeName: requestId
