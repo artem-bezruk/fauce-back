@@ -27,15 +27,12 @@ provider:
             - Ref: 'AWS::AccountId'
             - 'table/${self:service}-${self:provider.stage}-*'
 functions:  
-  authorizerFunc:
-    handler: src/lib/authorization.handler
   hello:
     handler: src/hello.handler
     events:
         - http:
             path: hello
             method: get
-            authorizer: authorizerFunc
             cors: true
   faucetRequest:
     timeout: 15
