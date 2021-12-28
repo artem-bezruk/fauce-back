@@ -1,4 +1,8 @@
 service: celo-faucet-api
+package:
+  exclude:
+    - node_modules/**
+    - venv/**
 provider:
   name: aws
   runtime: nodejs10.x
