@@ -15,5 +15,11 @@ describe('utils', () => {
         const result = utils.createHttpResponse(201, {message: "Created!"});
         assert.deepEqual(result, expected);
       });
-    });
+  });
+  describe('getTimestamp()', () => {
+    it('should successfully return timestamp', () => {      
+      const result = utils.getTimestamp()
+      assert(result);
+    }); 
+  });  
 });
