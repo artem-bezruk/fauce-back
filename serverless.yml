@@ -7,7 +7,7 @@ provider:
   stage: ${opt:stage, 'dev'}
   environment:
     FAUCET_QUEUE_TABLE_NAME: ${self:service}-${self:provider.stage}-faucet-queue
-    NODE_PROVIDER: 'https://baklava-forno.celo-testnet.org'
+    NODE_PROVIDER: 'https://alfajores-forno.celo-testnet.org'
     SECRET_NAME: 'CELO_BAKLAVA_FAUCET_PRIVATE_KEY'
     REGION: ${self:provider.region}
   iamRoleStatements:
