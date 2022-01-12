@@ -5,6 +5,7 @@ const uuid = require("uuid/v4");
 const NODE_URL = process.env.NODE_PROVIDER;
 const REGION = process.env.AWS_REGION;
 const SECRET_NAME = process.env.PRIVATE_KEY_SECRET_NAME;
+const FAUCET_AMOUNT = process.env.DEFAULT_FAUCET_VALUE;
 module.exports.createFaucetRequest = (faucetRequest) => {
     faucetRequest["requestId"] = uuid();
     faucetRequest["createdTimestamp"] = utils.getTimestamp();
@@ -21,10 +22,10 @@ module.exports.claimFaucetRequest = async (faucetRequest) => {
         const accounts = await kit.web3.eth.getAccounts();
         const account = accounts[0];
         const goldtoken = await kit.contracts.getGoldToken()
-        const oneGold = kit.web3.utils.toWei('1', 'ether');
-        const tx = await goldtoken.transfer(faucetRequest.address, oneGold).send({from: account});
+        const faucetAmt = kit.web3.utils.toWei(FAUCET_AMOUNT, 'ether');
+        const tx = await goldtoken.transfer(faucetRequest.address, faucetAmt).send({from: account});
         const receipt = await tx.waitReceipt();
-        console.log(`Transaction created, sent 1 cGLD to ${faucetRequest.address}}`);
+        console.log(`Transaction created, sent ${FAUCET_AMOUNT} cGLD to ${faucetRequest.address}}`);
         console.log(receipt);
         const balance = await goldtoken.balanceOf(account.address);
         console.log(`Balance of funding account is now ${balance.toString()}`);

@@ -8,8 +8,9 @@ provider:
   environment:
     FAUCET_QUEUE_TABLE_NAME: ${self:service}-${self:provider.stage}-faucet-queue
     NODE_PROVIDER: 'https://alfajores-forno.celo-testnet.org'
-    SECRET_NAME: 'CELO_BAKLAVA_FAUCET_PRIVATE_KEY'
+    SECRET_NAME: 'CELO_ALFAJORES_FAUCET_PRIVATE_KEY'
     REGION: ${self:provider.region}
+    DEFAULT_FAUCET_VALUE: '0.01'
   iamRoleStatements:
     - Effect: Allow
       Action:
