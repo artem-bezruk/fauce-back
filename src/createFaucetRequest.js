@@ -2,7 +2,7 @@ const faucet = require('./lib/faucet');
 const utils = require('./lib/utils');
 const faucetStorage = require('./lib/faucetStorage');
 const web3utils = require('web3-utils');
-const BURN_ADDRESS='0x0000000000000000000000000000000000000000'
+const BURN_ADDRESS='0x0000000000000000000000000000000000000000';
 module.exports.handler = async function handler(event, context, callback) {
   console.log(event);
   const faucetRequest = event.body && JSON.parse(event.body);

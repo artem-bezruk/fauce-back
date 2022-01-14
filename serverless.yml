@@ -53,7 +53,7 @@ functions:
             cors: true           
   getFaucetRequest:
     timeout: 15
-    handler: src/getFaucetRequests.handler
+    handler: src/getFaucetRequest.handler
     events:
         - http:
             path: request
