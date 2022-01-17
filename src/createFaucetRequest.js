@@ -18,9 +18,11 @@ module.exports.handler = async function handler(event, context, callback) {
   }
   else
   {
-    try{    
-      const queue = await faucetStorage.getAll();
-      addressAlreadyInQueue = faucetStorage.filter((request)=>request.address==faucetRequest.address)[0];
+    try{
+      const result = await faucetStorage.getAll();
+      const queue = result && result.Items || [];
+      console.log(`Existing requests: ${JSON.stringify(queue)}`);
+      addressAlreadyInQueue = queue.filter((request)=>request.address==faucetRequest.address)[0];
       if(addressAlreadyInQueue){
         const message = `'Address ${faucetRequest.address} is already in the queue`;
         callback(null, utils.createHttpResponse(400, {message: message}));

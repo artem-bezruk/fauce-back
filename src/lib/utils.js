@@ -3,7 +3,7 @@ const defaultHeaders = {
     'Access-Control-Allow-Credentials': true,
 }
 module.exports.getTimestamp = () => {
-    const date = new Date();    
+    const date = new Date();
     return date.getTime();
 }
 createHttpResponse = (status, body) => {
@@ -19,18 +19,19 @@ module.exports.getSecret = async (secretName, region) => {
     const AWS = require('aws-sdk');
     let secret, decodedBinarySecret;
     const client = new AWS.SecretsManager({
-    region: region
+        region: region
     });
-    try{
-        const data = await client.getSecretValue({SecretId: secretName}).promise();        
+    try {
+        const data = await client.getSecretValue({
+            SecretId: secretName
+        }).promise();
         if ('SecretString' in data) {
             secret = data.SecretString;
         } else {
             let buff = new Buffer.from(data.SecretBinary, 'base64');
             decodedBinarySecret = buff.toString('ascii');
         }
-    }
-    catch(err){
+    } catch (err) {
         throw err;
     }
     return secret || decodedBinarySecret;

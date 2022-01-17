@@ -5,7 +5,7 @@ describe('hello', () => {
     const event = {
       resource: "/",
       path: "/hello",
-      httpMethod: "GET" 
+      httpMethod: "GET"
     };
     it('should return http status 200 ', () => {
       hello.handler(event, null, (err, response) => {
@@ -14,9 +14,11 @@ describe('hello', () => {
     });
     it('should return "Hello World" text', () => {
       hello.handler(event, null, (err, response) => {
-        const body = JSON.stringify({message:"Hello World!"});
+        const body = JSON.stringify({
+          message: "Hello World!"
+        });
         assert.equal(response.body, body);
-      });  
+      });
     });
   });
 });

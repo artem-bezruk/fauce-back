@@ -2,17 +2,17 @@ const AWS = require('aws-sdk');
 const documentClient = new AWS.DynamoDB.DocumentClient();
 const tableName = process.env.FAUCET_QUEUE_TABLE_NAME;
 module.exports.create = (faucetRequest) => {
-    let params = {
-        TableName: tableName,
-        Item: faucetRequest
-    };
-    return documentClient.put(params).promise();
+	let params = {
+		TableName: tableName,
+		Item: faucetRequest
+	};
+	return documentClient.put(params).promise();
 };
 module.exports.getAll = () => {
-    let params = {
-        TableName: tableName
-    };
-    return documentClient.scan(params).promise();
+	let params = {
+		TableName: tableName
+	};
+	return documentClient.scan(params).promise();
 };
 module.exports.delete = (address) => {
 	let params = {
