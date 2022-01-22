@@ -8,10 +8,27 @@ provider:
   environment:
     FAUCET_QUEUE_TABLE_NAME: ${self:service}-${self:provider.stage}-faucet-queue
     NODE_PROVIDER: 'https://alfajores-forno.celo-testnet.org'
-    SECRET_NAME: 'CELO_ALFAJORES_FAUCET_PRIVATE_KEY'
+    PRIVATE_KEY_SECRET_NAME: 'CELO_ALFAJORES_FAUCET_PRIVATE_KEY'
     REGION: ${self:provider.region}
     DEFAULT_FAUCET_VALUE: '0.01'
+    MAX_QUEUE_SIZE: 5
+    DEFAULT_REQUEST_COOLDOWN: 12
   iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - secretsmanager:GetSecretValue
+        - secretsmanager:GetResourcePolicy
+        - secretsmanager:GetSecretValue
+        - secretsmanager:DescribeSecret
+        - secretsmanager:ListSecretVersionIds
+      Resource:
+        - Fn::Join:
+          - ':'
+          -
+            - 'arn:aws:secretsmanager:${self:provider.region}'
+            - Ref: 'AWS::AccountId'
+            - 'secret'
+            - '${self:provider.environment.PRIVATE_KEY_SECRET_NAME}-*'
     - Effect: Allow
       Action:
         - dynamodb:Query

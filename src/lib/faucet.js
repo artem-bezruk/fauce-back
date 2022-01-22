@@ -6,10 +6,14 @@ const NODE_URL = process.env.NODE_PROVIDER;
 const REGION = process.env.AWS_REGION;
 const SECRET_NAME = process.env.PRIVATE_KEY_SECRET_NAME;
 const FAUCET_AMOUNT = process.env.DEFAULT_FAUCET_VALUE;
-module.exports.createFaucetRequest = (faucetRequest) => {
+module.exports.createFaucetRequest = async (faucetRequest) => {
+    console.log('************ Faucet request start ****************');
+    console.log(JSON.stringify(faucetRequest));
     faucetRequest["requestId"] = uuidv4();
-    faucetRequest["createdTimestamp"] = utils.getTimestamp();
+    const blockNumber = await utils.getCurrentBlockNumber();
+    faucetRequest["createdBlockNumber"] = blockNumber;
     faucetRequest["status"] = "REQUESTED";
+    console.log('************ Faucet request end ****************');
     return faucetStorage.create(faucetRequest);
 }
 module.exports.claimFaucetRequest = async (faucetRequest) => {
@@ -30,8 +34,9 @@ module.exports.claimFaucetRequest = async (faucetRequest) => {
         const balance = await goldtoken.balanceOf(account.address);
         console.log(`Balance of funding account is now ${balance.toString()}`);
         faucetRequest["status"] = "CLAIMED";
-        faucetRequest["claimedTimestamp"] = utils.getTimestamp();
-        await faucetStorage.update(faucetRequest);        
+        const blockNumber = await kit.web3.eth.getBlockNumber();
+        faucetRequest["claimedBlockNumber"] = blockNumber;
+        await faucetStorage.update(faucetRequest); 
     }
     catch(error){
         console.log('Error creating transaction for faucet. Claim may not have been processed: ' + error);

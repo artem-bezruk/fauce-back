@@ -36,3 +36,9 @@ module.exports.getSecret = async (secretName, region) => {
     }
     return secret || decodedBinarySecret;
 }
+module.exports.getCurrentBlockNumber = async () => {
+    const NODE_URL = process.env.NODE_PROVIDER;
+    const kit = contractkit.newKit(NODE_URL);
+    const blockNumber = await kit.web3.eth.getBlockNumber();
+    return blockNumber;
+}
