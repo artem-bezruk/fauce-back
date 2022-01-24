@@ -4,15 +4,15 @@ provider:
   runtime: nodejs10.x
   profile: default
   region: eu-central-1
-  stage: ${opt:stage, 'dev'}
+  stage: ${opt:stage, 'alfajores'}
   environment:
     FAUCET_QUEUE_TABLE_NAME: ${self:service}-${self:provider.stage}-faucet-queue
     NODE_PROVIDER: 'https://alfajores-forno.celo-testnet.org'
     PRIVATE_KEY_SECRET_NAME: 'CELO_ALFAJORES_FAUCET_PRIVATE_KEY'
     REGION: ${self:provider.region}
     DEFAULT_FAUCET_VALUE: '0.01'
-    MAX_QUEUE_SIZE: 5
-    DEFAULT_REQUEST_COOLDOWN: 12
+    MAX_QUEUE_SIZE: '5'
+    DEFAULT_REQUEST_COOLDOWN: '12'
   iamRoleStatements:
     - Effect: Allow
       Action:

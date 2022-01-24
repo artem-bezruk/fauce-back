@@ -25,7 +25,7 @@ module.exports.handler = async function handler(event, context, callback) {
       const result = await faucetStorage.getAll();
       const queue = result && result.Items || [];
       console.log(`Existing requests: ${JSON.stringify(queue)}`);
-      if (queue.length >= MAX_QUEUE_SIZE) {
+      if (queue.filter((item) => item.status === 'REQUESTED').length >= MAX_QUEUE_SIZE) {
         const message = `Only ${MAX_QUEUE_SIZE} faucet requests are allowed at one time`;
         callback(null, utils.createHttpResponse(400, {
           message: message

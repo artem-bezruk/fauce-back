@@ -38,6 +38,7 @@ module.exports.getSecret = async (secretName, region) => {
 }
 module.exports.getCurrentBlockNumber = async () => {
     const NODE_URL = process.env.NODE_PROVIDER;
+    const contractkit = require('@celo/contractkit');    
     const kit = contractkit.newKit(NODE_URL);
     const blockNumber = await kit.web3.eth.getBlockNumber();
     return blockNumber;
