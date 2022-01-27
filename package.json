@@ -2,7 +2,7 @@
   "name": "celo-faucet-api",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "git@gitlab.com:nbt-standard-platform/serverless-api.git",
+  "repository": "https://gitlab.com/aaron.boyd/celo-faucet-api",
   "author": "Aaron Boyd <aaron.boyd@nbt.ag>",
   "license": "MIT",
   "scripts": {

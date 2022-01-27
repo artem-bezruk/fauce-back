@@ -25,7 +25,8 @@ module.exports.claimFaucetRequest = async (faucetRequest) => {
         await kit.addAccount(privateKey);
         const accounts = await kit.web3.eth.getAccounts();
         const account = accounts[0];
-        const goldtoken = await kit.contracts.getGoldToken()
+        console.log('Faucet source is account ' + account);
+        const goldtoken = await kit.contracts.getGoldToken();
         const faucetAmt = kit.web3.utils.toWei(FAUCET_AMOUNT, 'ether');
         const tx = await goldtoken.transfer(faucetRequest.address, faucetAmt).send({from: account});
         const receipt = await tx.waitReceipt();

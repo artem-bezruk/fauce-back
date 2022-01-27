@@ -26,7 +26,7 @@ module.exports.handler = async function handler(event, context, callback) {
           message: message
         }));
       } else if ((blockNumber - queuedRequest.createdBlockNumber) < REQUEST_COOLDOWN) {
-          const message = `Request ${faucetRequest.address} is still cooling down, please wait ${(blockNumber - queuedRequest.createdBlockNumber)} more blocks before claiming`;
+          const message = `Request ${faucetRequest.address} is still cooling down, please wait ${REQUEST_COOLDOWN - (blockNumber - queuedRequest.createdBlockNumber)} more blocks before claiming`;
           callback(null, utils.createHttpResponse(400, {
             message: message
            }));
