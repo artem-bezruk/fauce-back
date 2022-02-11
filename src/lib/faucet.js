@@ -22,7 +22,7 @@ module.exports.claimFaucetRequest = async (faucetRequest) => {
     try{
         const kit = contractkit.newKit(NODE_URL);
         const privateKey = utils.getSecret(SECRET_NAME, REGION);
-        await kit.addAccount(privateKey);
+        kit.addAccount(privateKey.toString('hex'));
         const accounts = await kit.web3.eth.getAccounts();
         const account = accounts[0];
         console.log('Faucet source is account ' + account);
