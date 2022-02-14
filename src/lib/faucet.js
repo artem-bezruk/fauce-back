@@ -21,27 +21,36 @@ module.exports.claimFaucetRequest = async (faucetRequest) => {
     console.log(JSON.stringify(faucetRequest));
     try{
         const kit = contractkit.newKit(NODE_URL);
-        const privateKey = utils.getSecret(SECRET_NAME, REGION);
-        kit.addAccount(privateKey.toString('hex'));
-        const accounts = await kit.web3.eth.getAccounts();
-        const account = accounts[0];
-        console.log('Faucet source is account ' + account);
-        const goldtoken = await kit.contracts.getGoldToken();
-        const faucetAmt = kit.web3.utils.toWei(FAUCET_AMOUNT, 'ether');
-        const tx = await goldtoken.transfer(faucetRequest.address, faucetAmt).send({from: account});
-        const receipt = await tx.waitReceipt();
-        console.log(`Transaction created, sent ${FAUCET_AMOUNT} cGLD to ${faucetRequest.address}}`);
-        console.log(receipt);
-        const balance = await goldtoken.balanceOf(account.address);
-        console.log(`Balance of funding account is now ${balance.toString()}`);
         faucetRequest["status"] = "CLAIMED";
         const blockNumber = await kit.web3.eth.getBlockNumber();
         faucetRequest["claimedBlockNumber"] = blockNumber;
         await faucetStorage.update(faucetRequest); 
+        const privateKey = await utils.getSecret(SECRET_NAME, REGION);
+        kit.addAccount(privateKey);
+        const accounts = await kit.web3.eth.getAccounts();
+        const account = accounts[0];
+        console.log('Faucet source is account ' + account);
+        const goldtoken = await kit.contracts.getGoldToken();       
+        const faucetAmt = await kit.web3.utils.toWei(FAUCET_AMOUNT, 'ether');       
+        console.log(`Attempting - await goldtoken.transfer(${faucetRequest.address}, ${faucetAmt}).send({from: ${account}})`);
+        const tx = await goldtoken.transfer(faucetRequest.address, faucetAmt).send({from: account});
+        const receipt = await tx.waitReceipt();        
+        console.log(`Transaction sent, sent ${FAUCET_AMOUNT} cGLD to ${faucetRequest.address}}`);
+        console.log(receipt);
+        const balance = await goldtoken.balanceOf(account);
+        console.log(`Balance of funding account is now ${balance.toString()}`);
     }
-    catch(error){
+    catch(error){       
         console.log('Error creating transaction for faucet. Claim may not have been processed: ' + error);
-        throw error;
+        try{
+            console.log("Attempting to set request back to 'REQUESTED'");
+            faucetRequest["status"] = "REQUESTED";
+            await faucetStorage.update(faucetRequest);
+        }
+        catch(error){
+            console.log(error);
+        }
+        throw error; 
     }
     console.log('************ Faucet claim end ****************');
     return faucetRequest;

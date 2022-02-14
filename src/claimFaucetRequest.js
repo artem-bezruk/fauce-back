@@ -30,8 +30,8 @@ module.exports.handler = async function handler(event, context, callback) {
           callback(null, utils.createHttpResponse(400, {
             message: message
            }));
-      } else {
-        const claimResult = await faucet.claimFaucetRequest(faucetRequest);
+      } else {        
+        const claimResult = await faucet.claimFaucetRequest(queuedRequest);
         const body = {
           claimResult: claimResult
         };

@@ -42,13 +42,16 @@ const updateExpression = (args) => {
 };
 module.exports.update = (faucetRequest) => {
 	const requestId = faucetRequest.requestId;
-	delete orgObj["requestId"];
+	console.log('faucetStorage - ' + JSON.stringify(faucetRequest));
+	delete faucetRequest["requestId"];
+	console.log('faucetStorage - ' + JSON.stringify(faucetRequest));
 	let params = {
 		TableName: tableName,
 		Key: {
 			requestId: requestId
 		},
-		...updateExpression(orgObj)
+		...updateExpression(faucetRequest)
 	};
+	console.log('faucetStorage - ' + JSON.stringify(faucetRequest));
 	return documentClient.update(params).promise();
 };
