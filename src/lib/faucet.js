@@ -21,10 +21,6 @@ module.exports.claimFaucetRequest = async (faucetRequest) => {
     console.log(JSON.stringify(faucetRequest));
     try{
         const kit = contractkit.newKit(NODE_URL);
-        faucetRequest["status"] = "CLAIMED";
-        const blockNumber = await kit.web3.eth.getBlockNumber();
-        faucetRequest["claimedBlockNumber"] = blockNumber;
-        await faucetStorage.update(faucetRequest); 
         const privateKey = await utils.getSecret(SECRET_NAME, REGION);
         kit.addAccount(privateKey);
         const accounts = await kit.web3.eth.getAccounts();
@@ -39,6 +35,9 @@ module.exports.claimFaucetRequest = async (faucetRequest) => {
         console.log(receipt);
         const balance = await goldtoken.balanceOf(account);
         console.log(`Balance of funding account is now ${balance.toString()}`);
+        faucetRequest["status"] = "CLAIMED";
+        faucetRequest["claimedBlockNumber"] = receipt.blockNumber;
+        await faucetStorage.update(faucetRequest);
     }
     catch(error){       
         console.log('Error creating transaction for faucet. Claim may not have been processed: ' + error);

@@ -42,9 +42,7 @@ const updateExpression = (args) => {
 };
 module.exports.update = (faucetRequest) => {
 	const requestId = faucetRequest.requestId;
-	console.log('faucetStorage - ' + JSON.stringify(faucetRequest));
 	delete faucetRequest["requestId"];
-	console.log('faucetStorage - ' + JSON.stringify(faucetRequest));
 	let params = {
 		TableName: tableName,
 		Key: {
@@ -52,6 +50,5 @@ module.exports.update = (faucetRequest) => {
 		},
 		...updateExpression(faucetRequest)
 	};
-	console.log('faucetStorage - ' + JSON.stringify(faucetRequest));
 	return documentClient.update(params).promise();
 };
