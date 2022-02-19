@@ -31,7 +31,7 @@ module.exports.handler = async function handler(event, context, callback) {
           message: message
         }));
       } else {
-        addressAlreadyInQueue = queue.filter((request) => request.address == faucetRequest.address)[0];
+        addressAlreadyInQueue = queue.filter((request) => ((request.address == faucetRequest.address) && request.status === "REQUESTED"))[0];
         if (addressAlreadyInQueue) {
           const message = `Address ${faucetRequest.address} is already in the queue`;
           callback(null, utils.createHttpResponse(400, {
