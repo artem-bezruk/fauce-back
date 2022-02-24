@@ -14,14 +14,9 @@ module.exports.handler = async function handler(event, context, callback) {
       const result = await faucetStorage.getAll();
       const queue = result && result.Items || [];
       const blockNumber = await utils.getCurrentBlockNumber();
-      queuedRequest = queue.filter((request) => request.address == faucetRequest.address)[0];
+      queuedRequest = queue.filter((request) => ((request.address == faucetRequest.address) && (request.status === "REQUESTED")))[0];
       if (!queuedRequest) {
-        const message = `Address ${faucetRequest.address} is not in the queue`;
-        callback(null, utils.createHttpResponse(400, {
-          message: message
-        }));
-      } else if (queuedRequest.status === 'CLAIMED') {
-        const message = `Address ${faucetRequest.address} is not in the queue`;
+        const message = `Address ${faucetRequest.address} is not in the queue or has already been claimed`;
         callback(null, utils.createHttpResponse(400, {
           message: message
         }));
