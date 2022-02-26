@@ -6,6 +6,19 @@ const NODE_URL = process.env.NODE_PROVIDER;
 const REGION = process.env.AWS_REGION;
 const SECRET_NAME = process.env.PRIVATE_KEY_SECRET_NAME;
 const FAUCET_AMOUNT = process.env.DEFAULT_FAUCET_VALUE;
+module.exports.faucetBalance = async () => {
+    console.log('************ Faucet balance request start ****************');
+    const kit = contractkit.newKit(NODE_URL);
+    const privateKey = await utils.getSecret(SECRET_NAME, REGION);
+    kit.addAccount(privateKey);
+    const accounts = await kit.web3.eth.getAccounts();
+    const account = accounts[0];
+    console.log('Faucet source is account ' + account);
+    const goldtoken = await kit.contracts.getGoldToken();       
+    const balance = await goldtoken.balanceOf(account);
+    console.log('************ Faucet balance request end ****************');
+    return balance;
+}
 module.exports.createFaucetRequest = async (faucetRequest) => {
     console.log('************ Faucet request start ****************');
     console.log(JSON.stringify(faucetRequest));
