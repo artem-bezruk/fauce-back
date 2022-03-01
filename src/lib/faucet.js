@@ -50,7 +50,7 @@ module.exports.claimFaucetRequest = async (faucetRequest) => {
         console.log(`Balance of funding account is now ${balance.toString()}`);
         faucetRequest["status"] = "CLAIMED";
         faucetRequest["claimedBlockNumber"] = receipt.blockNumber;
-        faucetRequest["txId"] = receipt.txId;
+        faucetRequest["txId"] = receipt.transactionHash;
         await faucetStorage.update(faucetRequest);
     }
     catch(error){       
