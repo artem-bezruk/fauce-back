@@ -6,7 +6,7 @@ const NODE_URL = process.env.NODE_PROVIDER;
 const REGION = process.env.AWS_REGION;
 const SECRET_NAME = process.env.PRIVATE_KEY_SECRET_NAME;
 const FAUCET_AMOUNT = process.env.DEFAULT_FAUCET_VALUE;
-module.exports.faucetBalance = async () => {
+module.exports.getFaucetBalance = async () => {
     console.log('************ Faucet balance request start ****************');
     const kit = contractkit.newKit(NODE_URL);
     const privateKey = await utils.getSecret(SECRET_NAME, REGION);
