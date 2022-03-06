@@ -16,6 +16,7 @@ module.exports.getFaucetBalance = async () => {
     console.log('Faucet source is account ' + account);
     const goldtoken = await kit.contracts.getGoldToken();       
     const balance = await goldtoken.balanceOf(account);
+    console.log(`Faucet balance is ${balance}`);
     console.log('************ Faucet balance request end ****************');
     return balance;
 }

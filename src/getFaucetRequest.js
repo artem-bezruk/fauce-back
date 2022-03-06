@@ -8,7 +8,7 @@ module.exports.handler = async (event, context, callback) => {
     const sortedResults = parsedResult.sort((a, b) => {
       return a.createdTimestamp - b.createdTimestamp
     });
-    const faucetBalance = faucet.getFaucetBalance();
+    const faucetBalance = await faucet.getFaucetBalance();
     const body = {
       faucetRequests: sortedResults,
       faucetBalance: faucetBalance
