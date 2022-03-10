@@ -17,7 +17,7 @@ module.exports.getFaucetBalance = async () => {
     const goldtoken = await kit.contracts.getGoldToken();       
     const balance = await goldtoken.balanceOf(account);
     console.log(`Faucet balance is ${balance} in wei`);
-    const ethBalance = kit.web3.utils.fromWei(balance, 'ether');
+    const ethBalance = kit.web3.utils.fromWei(balance.toString(), 'ether');
     console.log('************ Faucet balance request end ****************');
     return ethBalance;
 }
