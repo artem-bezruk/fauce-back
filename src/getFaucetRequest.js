@@ -8,6 +8,7 @@ module.exports.handler = async (event, context, callback) => {
     const sortedResults = parsedResult.sort((a, b) => {
       return a.createdTimestamp - b.createdTimestamp
     });
+    const limitedResults = sortedResults.slice(0,20);
     const faucetBalance = await faucet.getFaucetBalance();
     const body = {
       faucetRequests: sortedResults,
