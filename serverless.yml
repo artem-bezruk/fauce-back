@@ -11,7 +11,7 @@ provider:
     PRIVATE_KEY_SECRET_NAME: 'CELO_ALFAJORES_FAUCET_PRIVATE_KEY'
     REGION: ${self:provider.region}
     DEFAULT_FAUCET_VALUE: '0.01'
-    MAX_QUEUE_SIZE: '5'
+    MAX_QUEUE_SIZE: '20'
     DEFAULT_REQUEST_COOLDOWN: '12'
   iamRoleStatements:
     - Effect: Allow
