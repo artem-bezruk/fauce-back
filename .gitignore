@@ -4,3 +4,7 @@ jspm_packages
 
 # Serverless directories
 .serverless
+
+.alfajores_account
+.baklava_account
+.mainnet_account
