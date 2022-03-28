@@ -10,7 +10,7 @@ provider:
     NODE_PROVIDER: 'https://alfajores-forno.celo-testnet.org'
     PRIVATE_KEY_SECRET_NAME: 'CELO_ALFAJORES_FAUCET_PRIVATE_KEY'
     REGION: ${self:provider.region}
-    DEFAULT_FAUCET_VALUE: '0.01'
+    DEFAULT_FAUCET_VALUE: '1.0'
     MAX_QUEUE_SIZE: '20'
     DEFAULT_REQUEST_COOLDOWN: '12'
   iamRoleStatements:
