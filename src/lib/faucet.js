@@ -2,10 +2,12 @@ const contractkit = require('@celo/contractkit');
 const faucetStorage = require('./faucetStorage');
 const utils = require('./utils');
 const { v4: uuidv4 } = require('uuid');
+const BigNumber = require('big.js');
 const NODE_URL = process.env.NODE_PROVIDER;
 const REGION = process.env.AWS_REGION;
 const SECRET_NAME = process.env.PRIVATE_KEY_SECRET_NAME;
 const FAUCET_AMOUNT = process.env.DEFAULT_FAUCET_VALUE;
+const CELO_PRECISION = new BigNumber(10).pow(18);
 module.exports.getFaucetBalance = async () => {
     console.log('************ Faucet balance request start ****************');
     const kit = contractkit.newKit(NODE_URL);
@@ -15,11 +17,11 @@ module.exports.getFaucetBalance = async () => {
     const account = accounts[0];
     console.log('Faucet source is account ' + account);
     const goldtoken = await kit.contracts.getGoldToken();       
-    const balance = await goldtoken.balanceOf(account);
-    console.log(`Faucet balance is ${balance} in wei`);
-    const ethBalance = kit.web3.utils.fromWei(balance.toString(), 'ether');
+    const balance = new BigNumber(await goldtoken.balanceOf(account));
+    precisionBalance = balance.div(CELO_PRECISION);
+    console.log(`Faucet balance is ${precisionBalance} in wei`);
     console.log('************ Faucet balance request end ****************');
-    return ethBalance;
+    return precisionBalance;
 }
 module.exports.createFaucetRequest = async (faucetRequest) => {
     console.log('************ Faucet request start ****************');
@@ -48,7 +50,7 @@ module.exports.claimFaucetRequest = async (faucetRequest) => {
         const receipt = await tx.waitReceipt();        
         console.log(`Transaction sent, sent ${FAUCET_AMOUNT} cGLD to ${faucetRequest.address}}`);
         console.log(receipt);
-        const balance = await goldtoken.balanceOf(account);
+        const balance = new BigNumber(await goldtoken.balanceOf(account)).div(CELO_PRECISION);
         console.log(`Balance of funding account is now ${balance.toString()}`);
         faucetRequest["status"] = "CLAIMED";
         faucetRequest["claimedBlockNumber"] = receipt.blockNumber;
