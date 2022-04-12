@@ -5,6 +5,9 @@ jspm_packages
 # Serverless directories
 .serverless
 
+# Ignore nyc output
+.nyc_output
+
 .alfajores_account
 .baklava_account
 .mainnet_account
