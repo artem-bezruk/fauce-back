@@ -20,8 +20,14 @@ describe('utils', () => {
   });
   describe('getTimestamp()', () => {
     it('should successfully return timestamp', () => {
-      const result = utils.getTimestamp()
+      const result = utils.getTimestamp();
       assert(result);
     });
   });
+  describe('getCurrentBlockNumber()', () => {
+    it('should successfully return current Alfajores block number', () => {
+      const result = utils.getCurrentBlockNumber();
+      assert(result);
+    });
+  });  
 });
