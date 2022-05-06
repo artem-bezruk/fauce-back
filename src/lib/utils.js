@@ -43,3 +43,11 @@ module.exports.getCurrentBlockNumber = async () => {
     const blockNumber = await kit.web3.eth.getBlockNumber();
     return blockNumber;
 }
+module.exports.sortByRequestedBlock = (flip, data) => {
+    data.sort((x, y) => {
+      let a = x.createdBlockNumber, b = y.createdBlockNumber;
+      if(flip){a = y.createdBlockNumber; b = x.createdBlockNumber;}
+      return (a === b ? 0 : a > b ? 1 : -1);
+    });
+    return data;
+}

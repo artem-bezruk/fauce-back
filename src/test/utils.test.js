@@ -1,6 +1,6 @@
 var assert = require('assert');
 var utils = require('../lib/utils');
-describe('utils', async () => {
+describe('utils', () => {
   describe('createHttpResponse()', () => {
     it('should return valid API Gateway HTTP payload ', () => {
       const expected = {
@@ -25,9 +25,18 @@ describe('utils', async () => {
     });
   });
   describe('getCurrentBlockNumber()', () => {
-    it('should successfully return current Alfajores block number', async () => {
-      const result = await utils.getCurrentBlockNumber();
-      assert(result > 0);
+    it('should successfully return current Alfajores block number', () => {
+      const result = utils.getCurrentBlockNumber();
+      assert(result);
+    });
+  });  
+  describe('sortByRequestedBlock()', () => {
+    it('should successfully return sorted array by createdBlockNumber', () => {
+      const data =[{createdBlockNumber: 1}, {createdBlockNumber: 2}, {createdBlockNumber: -1}];
+      let result = utils.sortByRequestedBlock(true, data);
+      assert(result, [{createdBlockNumber: -1}, {createdBlockNumber: 1}, {createdBlockNumber: 2}]);
+      result = utils.sortByRequestedBlock(false, data);
+      assert(result, [{createdBlockNumber: 2}, {createdBlockNumber: 1}, {createdBlockNumber: -1}]);
     });
   });  
 });
