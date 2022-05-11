@@ -5,8 +5,10 @@ module.exports.handler = async (event, context, callback) => {
   try {
     const result = await faucetStorage.getAll();
     const parsedResult = ((result && result.Items || []));
-    const sortedResults = utils.sortByRequestedBlock(false, parsedResult);
+    const sortedResults = utils.sortByRequestedBlock(true, parsedResult);
     const limitedResults = sortedResults.slice(0,20);
+    console.log("Results after sorting and slicing ... ");
+    console.table(limitedResults);
     const faucetBalance = await faucet.getFaucetBalance();
     const body = {
       faucetRequests: limitedResults,
