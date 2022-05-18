@@ -1,6 +1,6 @@
 var assert = require('assert');
 var utils = require('../lib/utils');
-describe('utils', () => {
+describe('utils', async () => {
   describe('createHttpResponse()', () => {
     it('should return valid API Gateway HTTP payload ', () => {
       const expected = {
@@ -25,9 +25,9 @@ describe('utils', () => {
     });
   });
   describe('getCurrentBlockNumber()', () => {
-    it('should successfully return current Alfajores block number', () => {
-      const result = utils.getCurrentBlockNumber();
-      assert(result);
+    it('should successfully return current Alfajores block number', async () => {
+      const result = await utils.getCurrentBlockNumber();
+      assert(result > 0);
     });
   });  
   describe('sortByRequestedBlock()', () => {
